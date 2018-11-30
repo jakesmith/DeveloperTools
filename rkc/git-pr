@@ -1,0 +1,17 @@
+#!/bin/bash
+
+branch=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD)
+if [ "$#" -ge 1 ] ; then
+  into=$1
+  shift 1
+else
+  into=master
+fi
+remote="$(git remote | grep rkc)"
+if [ "$remote" = "" ]; then
+  remote="origin"
+fi
+repo="$(git remote -v | grep hpcc-systems.*fetch | sed s/[.]git.*// | sed s+.*/++)"
+git push --set-upstream $* $remote $branch 
+url=https://github.com/richardkchapman/$repo/pull/new/hpcc-systems:$into...$branch
+openlink $url
