@@ -1,0 +1,5 @@
+#/bin/bash
+git branch --merged master | egrep -v "(^\*|master|dev|candidate|stable)" | xargs git branch -d
+git branch -r --merged master | egrep -v "(^\*|master|dev|candidate|stable)" | grep "origin/" | sed 's/origin\///' | xargs -n 1 git push --delete origin
+git branch -r --merged master | egrep -v "(^\*|master|dev|candidate|stable)" | grep "origin/" | xargs -n 1 git branch -d -r
+

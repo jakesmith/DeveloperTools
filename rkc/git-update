@@ -1,0 +1,15 @@
+#!/bin/bash
+if [ "$#" -eq 1 ] ; then
+  remote=$1
+else
+  remote="$(git remote | grep upstream)"
+  if [ "$remote" = "" ]; then
+    remote="origin"
+  fi
+fi
+echo "Fetching data from $remote"
+git fetch $remote
+for candidate in `git branch | grep ' candidate-' | sed 's/\*//'` master stable
+do
+  git merge-ff -q $candidate $remote/$candidate
+done
