@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Work out which candidate branch this one was probably forked from
+
+best=1000000
+parent=
+
+for candidate in `git branch | grep ' candidate-' | sed 's/\*//'` master ; do
+  delta=$(git rev-list --count --no-merges $candidate...HEAD)
+  #echo $candidate : $delta
+  if [ $delta -lt $best ] ; then
+    best=$delta
+    parent=$candidate
+  fi
+done
+if [ -z $parent ] ; then
+  exit 2
+fi
+echo $parent

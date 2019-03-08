@@ -9,7 +9,7 @@ else
 fi
 echo "Fetching data from $remote"
 git fetch $remote
-for candidate in `git branch | grep ' candidate-' | sed 's/\*//'` master stable
+for candidate in `git branch | sed 's/\*/ /' | grep -E ' candidate-| master$| stable$' | sed 's/\*//'`
 do
   git merge-ff -q $candidate $remote/$candidate
 done
