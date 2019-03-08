@@ -5,7 +5,7 @@ if [ "$#" -ge 1 ] ; then
   into=$1
   shift 1
 else
-  into=master
+  into=$(git parent)
 fi
 remote="$(git remote | grep rkc)"
 if [ "$remote" = "" ]; then
