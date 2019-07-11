@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -lt 3 ]; then
- echo Usage: run NAME NETWORK STORAGEDIR IP
+ echo Usage: run NAME NETWORK STORAGEDIR IP [ADDITIONAL DOCKER PARAMS]
  exit 1
 fi
 
@@ -9,10 +9,12 @@ name=$1
 network=$2
 storageDir=$3
 ip=$4
+others=${@:5}
 
 clusterFolder=$(realpath ${storageDir})
 resourceFolder=$(realpath ../shared)
 
-echo docker run -d --rm --net ${network} --ip ${ip} --name ${name} -v ${clusterFolder}:/data -ti jcs/thormaster-fromsrcpkg:latest ${name}
-docker run -d --rm --net ${network} --ip ${ip} --name ${name} -v ${resourceFolder}:/shared -v ${clusterFolder}:/data -ti jcs/thormaster-fromsrcpkg:latest ${name}
+echo docker run -d --rm --net ${network} --ip ${ip} --name ${name} -v ${resourceFolder}:/shared -v ${clusterFolder}:/data ${others} -ti jcs/thormaster-fromsrcpkg:latest ${name}
+
+docker run -d --rm --net ${network} --ip ${ip} --name ${name} -v ${resourceFolder}:/shared -v ${clusterFolder}:/data ${others} -ti jcs/thormaster-fromsrcpkg:latest ${name}
 

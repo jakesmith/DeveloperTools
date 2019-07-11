@@ -32,14 +32,14 @@ masterimagename=${cluster}_thormaster
 
 # Consider usnig --network container:${masterimagename}, ... READ UP ON IT
 
-echo "RUNNING: ./runhpcc "${cluster}_thormaster" ${netname} ${storageDir} ${subnet}.2 ${masterimagename}"
-./runhpcc "${cluster}_thormaster" ${netname} ${storageDir} ${subnet}.2 ${masterimagename} &
+echo "RUNNING: ./runhpcc ${masterimagename} ${netname} ${storageDir} ${subnet}.2 -p 8010:8010"
+./runhpcc ${masterimagename} ${netname} ${storageDir} ${subnet}.2 -p 80:8010 &
 
 for slave in $(seq 1 ${numComputers}); do
   imagename=${cluster}_thorslave${slave}
   let "ipnum = 2 + ${slave}"
-  echo "RUNNING: ./runhpcc "${cluster}_thorslave${slave}" ${netname} ${storageDir} ${subnet}.${ipnum} ${imagename}"
-  ./runhpcc "${cluster}_thorslave${slave}" ${netname} ${storageDir} ${subnet}.${ipnum} ${imagename} &
+  echo "RUNNING: ./runhpcc ${imagename} ${netname} ${storageDir} ${subnet}.${ipnum}"
+  ./runhpcc ${imagename} ${netname} ${storageDir} ${subnet}.${ipnum} &
 done
 
 wait
